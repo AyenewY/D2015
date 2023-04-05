@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+        {% block content %}
+       
+    <table border="red">
+        {% for users in UserName %}
+        
+            <tr>
+            <td><h3>{{ users.user_name }}</h3></td>
+            <td><h3>{{ users.user_password}}</h3></td>
+            <td><h3>{{ users.user_ip}}</h3></td>
+            <td><h3>{{ users.user_regdate}}</h3></td>
+        </h2>
+        </tr>
+        
+        {% endfor %}
+    </table>
+   
+        <table border="red" >
+        {% for users in userMember %}
+        
+            <tr>
+            <td><h3>{{ users.usrgrp_user_id}}</h3></td>
+            <td><h3>{{ users.usrgrp_group_id}}</h3></td>
+        </h2>
+        </tr>
+        
+        {% endfor %}
+    </table>
+
+    <table border="red">
+        {% for users in userGroup %}
+        
+            <tr>
+            <td><h3>{{ users.group_id }}</h3></td>
+            <td><h3>{{ users.group_name}}</h3></td>
+        </h2>
+        </tr>
+        
+        {% endfor %}
+    </table>
+    {% endblock %}
