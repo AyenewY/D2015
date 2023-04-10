@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from .models import *
 from django.views import generic
 from django.urls import reverse
@@ -31,7 +31,3 @@ def user_reg(request, user_id):
         return render (request,"user_reg.html",result)
     except Exception as e:
         print (e)
-
-def userView(request, user_id):
-    return render (request, "templates/user_reg.html",{"userdetail":user_id})
-

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+        {% block content %}
+
+<form action="{% url 'user_view' user.user_name %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ UserName.user_name }}</h1></legend>
+    <input type="text" name="text_userName" value="{{ UserName.user_Name }}">
+    <input type="text" name="User_detail" value="{{UserName.user_Firstname}}">
+</fieldset>
+<input type="submit" value="Vote">
+</form>
+
+
+{% endblock %}
