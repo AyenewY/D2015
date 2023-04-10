@@ -1,8 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .models import *
 from django.views import generic
-
+from django.urls import reverse
 def index(user_id):
     list_user =tce_users.objects.all()
     context = {"UserName":list_user}
@@ -24,11 +24,14 @@ def display_join(user_id):
     result = {"user":user}
     return render(user_id,"test.html",result)
 
-'''def user_reg(user_id):
-    user = tce_users.objects.all()
-    result={"user":user}
-    return render (user_id,"user_reg.html",result)
-'''
-class userView(generic.DetailView):
-    model =tce_users
-    template_name = "templates/user_reg.html"
+def user_reg(request, user_id):
+    try:
+        user = tce_users.objects.filter(user_name=user_id)
+        result={"user":user}
+        return render (request,"user_reg.html",result)
+    except Exception as e:
+        print (e)
+
+def userView(request, user_id):
+    return render (request, "templates/user_reg.html",{"userdetail":user_id})
+

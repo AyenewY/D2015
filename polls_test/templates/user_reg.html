@@ -1,18 +1,13 @@
 {% extends "base.html" %}
-
-<form action="{% url 'polls_test:user_reg' tce_users.user_id %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <label text="UserName">UserName</label> 
-        <input type="text" value="{{tce_users.user_name}}">
-        {% tce_users.user_id %}
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        {% for choice in question.choice_set.all %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" 
-            value="{{ choice.id }}">
-            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+{% block content %}
+       
+        {% for users in user %}
+            <p> {{ users.user_name }}</p> 
+            <p> {{ users.user_Id }}</p> 
+            <p> {{ users.user_password }}</p> 
+            <p> {{ users.user_email }}</p> 
+            <p> {{ users.user_regdate }}</p> 
+            <p> {{ users.user_ip }}</p> 
+            <p> {{ users.user_firstname }}</p> 
         {% endfor %}
-    </fieldset>
-    <input type="submit" value="Vote">
-    </form>
-
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.urls import path
-
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -7,5 +8,5 @@ urlpatterns = [
     path('member',views.display, name='display'),
     path('groups',views.display_group,name='display_group'),
     path('user',views.display_join, name='user'),
-    path('user_reg',views.userView.as_view())
+    path('<str:user_id>/user_reg',views.user_reg, name='user_reg')
 ]

@@ -436,7 +436,7 @@ class tce_tests_users(models.Model):
 
 '''
 It record test set for users ........
-'''
+
 class tce_tests_users (models.Model):
     testuser_id = models.BigAutoField(
         primary_key=True,
@@ -466,7 +466,7 @@ class tce_tests_users (models.Model):
     testuser_comment =models.TextField(
         null=True
     )
-
+'''
 '''
 Test log information table 
 '''
