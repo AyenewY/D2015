@@ -30,3 +30,9 @@ h3 {
   .centerCell {
     text-align: center;
   }
+
+body
+{
+  background: #5c3b3b;
+  background-color: aquamarine;
+}
