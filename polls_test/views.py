@@ -31,3 +31,4 @@ def user_reg(request, user_id):
         return render (request,"user_reg.html",result)
     except Exception as e:
         print (e)
+
