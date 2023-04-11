@@ -1,8 +1,10 @@
 from django.db import models
-
+from django.db.models.functions import Length
 import datetime
 from django.utils import timezone, timesince
 # Create your models here.
+
+models.CharField.register_lookup(Length)
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
@@ -39,7 +41,8 @@ class tce_users (models.Model):
     )
     user_password = models.CharField(
         max_length=255,
-        null=False
+        null=False,
+        
     )
     user_email = models.CharField(
         max_length=255
@@ -49,7 +52,8 @@ class tce_users (models.Model):
         )
     user_ip = models.CharField (
         max_length=40,
-        default=''
+        default='',
+        blank=True
     )
     user_firstname = models.CharField(
         max_length=255
@@ -59,7 +63,8 @@ class tce_users (models.Model):
     )
     user_birthdate = models.DateField()
     user_birthplace = models.CharField(
-        max_length=255
+        max_length=255,
+        blank=True
     )
     user_regnumber = models.CharField(
         max_length=255,
@@ -67,7 +72,8 @@ class tce_users (models.Model):
     )
     user_ssn = models.CharField(
         max_length=255,
-        unique=True
+        unique=True,
+        blank=True
     )
     user_level = models.SmallIntegerField(
         null=False
@@ -75,11 +81,13 @@ class tce_users (models.Model):
     user_verifycode  = models.CharField (
         unique=True,
         default='',
-        max_length=255
+        max_length=255,
+        blank= True
     )
     user_otpkey  = models.CharField(
         max_length=255,
-        default=''
+        default='',
+        blank= True
     )
 
     def age_verfier(self):
@@ -87,6 +95,16 @@ class tce_users (models.Model):
             return self.user_birthdate
     def __str__(self):
         return self.user_name
+    
+    
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+            check=models.Q(user_password__length__gte = 8),
+            name= "tce_users_length", 
+            )
+        ]
 
 '''
 Module detail information for the exit system.....
@@ -136,7 +154,8 @@ class tce_subjects (models.Model):
         unique=True
     )
     subject_description = models.TextField(
-        default=''
+        default='',
+        blank=True
     )
     subject_enabled   =  models.BooleanField(
         default=False
@@ -165,11 +184,13 @@ class tce_questions (models.Model):
         on_delete=models.CASCADE
     )
     question_description = models.TextField(
-        null=False
+        null=False,
+        blank=True
     )
     question_explanation = models.TextField(
         null=True,
-        default= 'null'
+        default= 'null',
+        blank=True
     )
     question_type = models.SmallIntegerField(
         null=False,
@@ -217,10 +238,12 @@ class tce_answers (models.Model):
     )
     answer_description = models.TextField(
         null=True,
-        max_length=500
+        max_length=500,
+        blank=True
     )
     answer_explanation = models.TextField(
-        null=True
+        null=True,
+        blank=True
     )
     answer_isright = models.BooleanField(
         default= 0
@@ -241,6 +264,9 @@ class tce_answers (models.Model):
 Tests table for recording test related information in the database
 '''
 class tce_tests (models.Model):
+    testRepeatable = models.IntegerChoices (
+        'TestRepeat', "1 2 3 4 5 6 7 8 9 10"
+        )
     test_id = models.BigAutoField(
         primary_key=True,
         null= False
@@ -251,7 +277,8 @@ class tce_tests (models.Model):
         unique=True
     )
     test_description = models.TextField(
-        null=False
+        null=False,
+        blank=True
     )
     test_begin_time = models.DateTimeField(
         default=''
@@ -266,7 +293,8 @@ class tce_tests (models.Model):
     test_ip_range = models.CharField(
         max_length=255,
         null=False,
-        default="*.*.*.*"
+        default="*.*.*.*",
+        blank=True
     )
     test_results_to_users = models.BooleanField(
         default=False,
@@ -328,6 +356,7 @@ class tce_tests (models.Model):
     )
     test_repeatable = models.SmallIntegerField(
         default=0,
+        choices=testRepeatable.choices,
         null=False
     )
     test_mcma_partial_score = models.BooleanField(
@@ -346,10 +375,27 @@ class tce_tests (models.Model):
 
     def __str__(self):
         return self.test_name
+    
+    #models.CharField.register_lookup(Length)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+            check=models.Q(test_password__length__gte = 8),
+            name= "tce_test_length", 
+            )
+        ]
 '''
 A table used to record a test subject relationship information. 
 '''
 class tce_test_subject_set (models.Model):
+    Test_difficulty =[
+        (1,1),
+        (2,2),
+        (3,3),
+        (4,4),
+        (5,5)
+    ]
     tsubset_id = models.BigAutoField(
         primary_key=True,
         null=False
@@ -364,8 +410,7 @@ class tce_test_subject_set (models.Model):
         default=1
     )
     tsubset_difficulty = models.SmallIntegerField(
-        null=False,
-        default=1
+        choices=Test_difficulty
     )
     tsubset_quantity = models.SmallIntegerField(
         null=False,
@@ -431,7 +476,8 @@ class tce_tests_users(models.Model):
         null=False
     )
     testuser_comment = models.TextField(
-        default=''
+        default='',
+        blank= True
     )
 
 '''

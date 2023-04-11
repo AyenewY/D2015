@@ -5,7 +5,7 @@ from . import models
 from .models import tce_users
 
 admin.site.register(models.Choice)
-admin.site.register (models.Question)
+admin.site.register(models.Question)
 admin.site.register(models.tce_answers)
 admin.site.register(models.tce_modules)
 admin.site.register(models.tce_questions)
