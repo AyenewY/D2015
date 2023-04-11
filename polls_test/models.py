@@ -96,7 +96,7 @@ class tce_users (models.Model):
     def __str__(self):
         return self.user_name
     
-    
+    #models.CharField.register_lookup(Length)
 
     class Meta:
         constraints = [
@@ -272,6 +272,7 @@ class tce_tests (models.Model):
         null= False
     )
     test_name = models.CharField(
+        "Exit exam Test Name",
         max_length=255,
         null=False,
         unique=True
@@ -370,7 +371,8 @@ class tce_tests (models.Model):
     test_password = models.CharField(
         max_length=255,
         null=True,
-        default=''
+        default='',
+        blank=True
     )
 
     def __str__(self):
@@ -698,7 +700,8 @@ class tce_testsslcerts(models.Model):
     tstssl_test_id = models.ForeignKey(
         tce_tests,
         null=False,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name="Test SSl configuration"
     )
     tstssl_ssl_id = models.ForeignKey(
         tce_sslcerts,
