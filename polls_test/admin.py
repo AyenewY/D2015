@@ -24,7 +24,9 @@ admin.site.register(models.tce_testuser_stat)
 admin.site.register(models.tce_tests_users)
 admin.site.register(models.tce_user_groups)
 admin.site.register(models.tce_usrgroups)
-
+admin.site.register(models.course)
+admin.site.register(models.taken)
+admin.site.register(models.student)
 '''
 class TCEE_Users (admin.ModelAdmin):
     fields = ['user_name','user_firstname']

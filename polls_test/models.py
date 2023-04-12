@@ -715,3 +715,81 @@ class tce_testsslcerts(models.Model):
             fields=['tstssl_test_id', 'tstssl_ssl_id'], name ='testsslinfo'
             )
         ]
+
+
+#sample many to many relation
+
+class student (models.Model):
+    student_Id = models.CharField(
+        max_length=100,
+        primary_key=True,
+    )
+    student_fullname = models.CharField(
+        "Student Name",
+        max_length=100,
+        null=False,
+        blank=False,
+    )
+    student_Department =models.CharField(
+        max_length=100,
+        null=False,
+        blank=False
+    )
+
+    def __str__(self):
+        return self.student_fullname
+
+class course (models.Model):
+    course_Id = models.CharField(
+        max_length=50,
+        primary_key=True
+    )
+    course_Name = models.CharField(
+        null=False,
+        blank=False,
+        max_length=100
+    )
+    course_description = models.TextField(
+        null=False,
+        blank=True
+    )
+    student_Id = models.ManyToManyField(
+        student,
+        through="Taken"
+    )
+
+    def __str__(self):
+        return self.course_Id
+
+class taken (models.Model):
+    choice_semester = models.IntegerChoices(
+        "choice_semester" , "1 2 3"
+    )
+    taken_semester = models.PositiveSmallIntegerField(
+        blank=False,
+        null=False,
+        choices=choice_semester.choices
+    )
+    taken_year = models.PositiveIntegerField(
+        "Academic Year",
+        null=False,
+        blank=False,
+        default=2023
+    )
+    student_Id = models.ForeignKey(
+        student,
+        on_delete=models.CASCADE
+    )
+    course_Id = models.ForeignKey(
+        course,
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+            fields=['taken_semester', 'taken_year','student_Id','course_Id'], name ='crsstsID'
+            )
+        ]
+    def __str__(self):
+        return str(self.taken_semester)
