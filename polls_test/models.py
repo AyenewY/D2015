@@ -791,5 +791,7 @@ class taken (models.Model):
             fields=['taken_semester', 'taken_year','student_Id','course_Id'], name ='crsstsID'
             )
         ]
+        ordering = ["course_Id"]
     def __str__(self):
         return str(self.taken_semester)
+    
