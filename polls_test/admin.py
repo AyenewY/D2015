@@ -27,6 +27,9 @@ admin.site.register(models.tce_usrgroups)
 admin.site.register(models.course)
 admin.site.register(models.taken)
 admin.site.register(models.student)
+admin.site.register(models.permanent_employee)
+admin.site.register(models.Contract_employee)
+
 '''
 class TCEE_Users (admin.ModelAdmin):
     fields = ['user_name','user_firstname']

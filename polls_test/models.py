@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.functions import Length
 import datetime
 from django.utils import timezone, timesince
+from django.utils.text import slugify
 # Create your models here.
 
 models.CharField.register_lookup(Length)
@@ -758,6 +759,18 @@ class course (models.Model):
         through="Taken"
     )
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.course_Id)
+        if update_fields is not None and "course_Id" in update_fields:
+            update_fields = {"slug"}.union(update_fields)
+        super().save(
+            force_insert=force_insert,
+            force_update=force_update,
+            using=using,
+            update_fields=update_fields,
+        )
+
+
     def __str__(self):
         return self.course_Id
 
@@ -791,7 +804,74 @@ class taken (models.Model):
             fields=['taken_semester', 'taken_year','student_Id','course_Id'], name ='crsstsID'
             )
         ]
-        ordering = ["course_Id"]
+        ordering = ["student_Id"]
     def __str__(self):
         return str(self.taken_semester)
     
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.taken_semester)
+        if update_fields is not None and "taken_semester" in update_fields:
+            update_fields = {"slug"}.union(update_fields)
+        super().save(
+            force_insert=force_insert,
+            force_update=force_update,
+            using=using,
+            update_fields=update_fields,
+        )
+
+class employee(models.Model):
+    employee_name = models.CharField(
+        max_length=100,
+        blank=False,
+        null=False)
+    employee_id = models.CharField(
+        max_length=25,
+        primary_key=True
+    )
+    employee_age = models.PositiveIntegerField(
+        null=False,
+        default=20
+    )
+    employee_salary = models.FloatField(
+        "Employee Salary ",
+        null=False,
+        blank=False,
+        default=2500.00
+    )
+
+    class Meta:
+        abstract = True
+    
+class Contract_employee(employee):
+    duration_month = models.PositiveIntegerField(
+        null= False,
+        blank= False,
+        default= 12
+    )
+    allowance = models.PositiveIntegerField()
+    possible_extension = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False
+    )
+
+    def __str__(self):
+        return self.employee_name
+
+class permanent_employee(employee):
+    pension_rate =models.FloatField(
+        null=False,
+        blank=False,
+        default=0.05
+    )
+    retire_age = models.PositiveSmallIntegerField(
+        default=60,
+        null=False,
+        blank=False
+    )
+
+    def __str__(self):
+        return self.employee_name
+    class Meta (employee.Meta):
+        db_table = "per_employee"
+
