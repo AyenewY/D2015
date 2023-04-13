@@ -848,7 +848,11 @@ class Contract_employee(employee):
         blank= False,
         default= 12
     )
-    allowance = models.PositiveIntegerField()
+    allowance = models.PositiveIntegerField(
+        default=3000,
+        blank=False,
+        null=True
+    )
     possible_extension = models.BooleanField(
         default=True,
         blank=False,
@@ -875,3 +879,15 @@ class permanent_employee(employee):
     class Meta (employee.Meta):
         db_table = "per_employee"
 
+
+class retired_employee (Contract_employee):
+    
+    def __str__(self):
+        return self.employee_id
+    
+    class Meta:
+        db_table = ''
+        managed = True
+        verbose_name = 'ModelName'
+        verbose_name_plural = 'ModelNames'
+        proxy = True
