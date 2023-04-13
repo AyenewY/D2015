@@ -886,12 +886,11 @@ class retired_employee (Contract_employee):
         return self.employee_id
     
     class Meta:
-        db_table = ''
+        db_table = 'Retired Employee'
         managed = True
-        verbose_name = 'ModelName'
-        verbose_name_plural = 'ModelNames'
+        verbose_name = 'RetiredEmployee'
+        verbose_name_plural = 'RetiredEmployees'
         proxy = True
-
 
 class employee_salary(models.Model):
     job_title = models.CharField(
