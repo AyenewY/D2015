@@ -891,3 +891,29 @@ class retired_employee (Contract_employee):
         verbose_name = 'ModelName'
         verbose_name_plural = 'ModelNames'
         proxy = True
+
+
+class employee_salary(models.Model):
+    job_title = models.CharField(
+        max_length=100,
+        null=False,
+        default="Engineer"
+    )
+    job_grade = models.PositiveSmallIntegerField(
+        default=10,
+        null=False
+    )
+    salary = models.FloatField(
+        default=10000,
+        null=False,
+        blank=False
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+            fields=['job_grade', 'job_title'], name ='salaryScale'
+            )
+        ]
+class emp_collection (employee_salary, permanent_employee):
+    pass
