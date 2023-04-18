@@ -916,3 +916,4 @@ class employee_salary(models.Model):
         ]
 class emp_collection (employee_salary, permanent_employee):
     pass
+
