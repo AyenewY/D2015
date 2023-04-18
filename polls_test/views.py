@@ -26,9 +26,17 @@ def display_join(user_id):
 
 def user_reg(request, user_id):
     try:
-        user = tce_users.objects.filter(user_name=user_id)
+        user = tce_users.objects.filter(user_name=user_id).values(
+            'user_password','user_email','user_level'
+        )
         result={"user":user}
         return render (request,"user_reg.html",result)
     except Exception as e:
         print (e)
 
+def emp_result(request,emp_id):
+    employee_res = Contract_employee.objects.all().values(
+    'employee_name','employee_id','duration_month','allowance',
+    'employee_salary', 'employee_age')
+    result = {"employee":employee_res}
+    return render(request,"test.html",result)

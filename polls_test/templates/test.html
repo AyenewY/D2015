@@ -1,6 +1,20 @@
 {% extends "base.html" %}
         {% block content %}
        
+        <table border="red">
+            {% for employee1 in employee %}
+            
+                <tr>
+                <td><h3><a href = "{% url 'user_reg' users.user_name %}">{{ employee1.employee_name }}</a></h3></td>
+                <td><h3>{{ employee1.employee_age }}</h3></td>
+                <td><h3>{{ employee1.employee_salary }}</h3></td>
+                <td><h3>{{ employee1.employee_id}}</h3></td>
+                <td><h3>{{ employee1.duration_month}}</h3></td>
+                <td><h3>{{ employee1.allowance}}</h3></td>
+            </h2>
+            </tr>
+            {% endfor %}
+        </table>
     <table border="red">
         {% for users in UserName %}
         
