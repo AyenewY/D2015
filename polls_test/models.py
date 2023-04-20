@@ -873,7 +873,7 @@ class permanent_employee(employee):
         null=False,
         blank=False
     )
-    per = models.Manager()
+    #per = models.Manager()
     def __str__(self):
         return self.employee_name
     class Meta (employee.Meta):
