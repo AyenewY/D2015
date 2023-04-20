@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404, render
 from .models import *
 from django.views import generic
 from django.urls import reverse
+from django.contrib.postgres import *
+
 def index(user_id):
     list_user =tce_users.objects.all()
     context = {"UserName":list_user}
@@ -26,7 +28,7 @@ def display_join(user_id):
 
 def user_reg(request, user_id):
     try:
-        user = tce_users.objects.filter(user_name=user_id).values(
+        user = tce_users.objects.filter(user_name=user_id).only(
             'user_password','user_email','user_level'
         )
         result={"user":user}
@@ -34,9 +36,15 @@ def user_reg(request, user_id):
     except Exception as e:
         print (e)
 
-def emp_result(request,emp_id):
+def emp_result(emp_id):
     employee_res = Contract_employee.objects.all().values(
     'employee_name','employee_id','duration_month','allowance',
-    'employee_salary', 'employee_age')
+    'employee_salary', 'employee_age').filter(employee_name__icontains = 'man')
     result = {"employee":employee_res}
-    return render(request,"test.html",result)
+    return render(emp_id,"test.html",result)
+
+def per_result(emp_id):
+    employee_res = permanent_employee.per.all().values(
+    'employee_name','employee_id','employee_salary', 'employee_age')
+    result_per = {"emp":employee_res}
+    return render(emp_id,"test.html",result_per)
