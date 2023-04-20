@@ -48,10 +48,12 @@ def emp_result(emp_id):
             result = {"employee":employee_res}
             return render(emp_id,"test.html",result)
     except IntegrityError as e:
-        print(e.__str__)
+        #print(e.__str__)
         handle_exception()
     except Exception:
         handle_exception()
+    finally:
+        transaction.on_commit(handle_exception2)
 
 @transaction.atomic
 def per_result(emp_id):
@@ -63,3 +65,8 @@ def per_result(emp_id):
 def handle_exception():
     print ('''Error is happen in the program. 
            Please check your codes....''')
+
+def handle_exception2():
+    print ('''The transaction committed successfully. 
+           Your code is okay....''')
+   
