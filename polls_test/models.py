@@ -80,7 +80,7 @@ class tce_users (models.Model):
         null=False
     )
     user_verifycode  = models.CharField (
-        unique=True,
+        unique=False,
         default='',
         max_length=255,
         blank= True

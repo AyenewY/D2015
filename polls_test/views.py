@@ -4,11 +4,13 @@ from .models import *
 from django.views import generic
 from django.urls import reverse
 from django.contrib.postgres import *
+from django.db import transaction, IntegrityError
 
 def index(user_id):
-    list_user =tce_users.objects.all()
-    context = {"UserName":list_user}
-    return render(user_id, "test.html", context)
+    with transaction.atomic():
+        list_user =tce_users.objects.all()
+        context = {"UserName":list_user}
+        return render(user_id, "test.html", context)
 
 def display(user_id):
     list_user_member =tce_usrgroups.objects.order_by("usrgrp_group_id")
@@ -34,17 +36,30 @@ def user_reg(request, user_id):
         result={"user":user}
         return render (request,"user_reg.html",result)
     except Exception as e:
-        print (e)
+        print ("Error handled here....")
 
 def emp_result(emp_id):
-    employee_res = Contract_employee.objects.all().values(
-    'employee_name','employee_id','duration_month','allowance',
-    'employee_salary', 'employee_age').filter(employee_name__icontains = 'man')
-    result = {"employee":employee_res}
-    return render(emp_id,"test.html",result)
+    try:
 
+        with transaction.atomic():
+            employee_res = Contract_employee.objects.all().values(
+            'employee_name','employee_id','duration_month','allowance',
+            'employee_salary', 'employee_age').filter(employee_name__icontains = 'man')
+            result = {"employee":employee_res}
+            return render(emp_id,"test.html",result)
+    except IntegrityError as e:
+        print(e.__str__)
+        handle_exception()
+    except Exception:
+        handle_exception()
+
+@transaction.atomic
 def per_result(emp_id):
     employee_res = permanent_employee.per.all().values(
     'employee_name','employee_id','employee_salary', 'employee_age')
     result_per = {"emp":employee_res}
     return render(emp_id,"test.html",result_per)
+
+def handle_exception():
+    print ('''Error is happen in the program. 
+           Please check your codes....''')
