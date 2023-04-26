@@ -4,7 +4,8 @@ from .models import *
 from django.views import generic
 from django.urls import reverse
 from django.contrib.postgres import *
-from django.db import transaction, IntegrityError
+from django.db import transaction, IntegrityError, connection
+import time
 
 def index(user_id):
     with transaction.atomic():
@@ -70,4 +71,30 @@ def handle_exception2():
     print ('''The transaction committed successfully. 
            Your code is okay....''')
 
-   
+class QueryLogger:
+    def __init__(self):
+        self.queries = []
+
+    def __call__(self, execute, sql, params, many, context):
+        current_query = {"sql": sql, "params": params, "many": many}
+        start = time.monotonic()
+        try:
+            result = execute(sql, params, many, context)
+        except Exception as e:
+            current_query["status"] = "error"
+            current_query["exception"] = e
+            raise
+        else:
+            current_query["status"] = "ok"
+            return result
+        finally:
+            duration = time.monotonic() - start
+            current_query["duration"] = duration
+            self.queries.append(current_query)
+
+# ql = QueryLogger()
+# user_id =10
+# with connection.execute_wrapper(ql):
+#     index(user_id)
+# # Now we can print the log.
+# print(ql.queries)
